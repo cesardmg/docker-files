@@ -239,3 +239,68 @@ services:
        WORDPRESS_DB_NAME: wordpress
 volumes:
     db_data: {}
+
+
+#---------------------------------- BASIC STRUCTURE
+version: '3.8'        # Use a version compatible with your Docker setup
+
+services:             # Define the services needed for WordPress
+  wordpress:          # This will be the WordPress container
+    image: wordpress:latest  # Use the official WordPress image
+    ports:
+      - "8000:80"     # Map port 8000 on the host to port 80 in the container
+    volumes:
+      - ./html:/var/www/html  # Persist WordPress files
+    environment:      # Environment variables for WordPress
+      WORDPRESS_DB_HOST: db:3306        # Set the database host
+      WORDPRESS_DB_USER: wordpressuser   # Database username
+      WORDPRESS_DB_PASSWORD: wordpresspass  # Database password
+      WORDPRESS_DB_NAME: wordpressdb    # Database name
+    depends_on:
+      - db            # Make sure the database service is started first
+
+  db:                # This will be the database container for WordPress
+    image: mysql:5.7  # Use the official MySQL image
+    volumes:
+      - db_data:/var/lib/mysql  # Persist database files
+    environment:    # Environment variables for MySQL
+      MYSQL_ROOT_PASSWORD: rootpassword  # Root password
+      MYSQL_DATABASE: wordpressdb        # Database name
+      MYSQL_USER: wordpressuser          # Database username
+      MYSQL_PASSWORD: wordpresspass      # Database user password
+
+volumes:             # Define named volumes
+  db_data:           # This will store the database data persistently
+
+networks:            # Define networks (optional if the default network is used)
+  wp-network:        # Custom network for the WordPress environment
+    driver: bridge
+
+
+- `image`: Use `wordpress:latest` to get the latest official WordPress image.
+- `ports`: Expose WordPress on a specific port on the host.
+- `volumes`: Mount the directory for WordPress files to persist data.
+- `environment`: Set up WordPress-specific environment variables for database connections.
+
+**MySQL Database Service Options:**
+
+- `image`: Use a specific MySQL image that is compatible with WordPress.
+- `volumes`: Create a volume for MySQL to persist the database.
+- `environment`: Set up MySQL-specific environment variables for the root password, database name, and user credentials.
+
+**Commands for WordPress:**
+
+- `docker-compose up -d`: Start your WordPress and database containers in detached mode.
+- `docker-compose down`: Stop and remove the WordPress and database containers.
+- `docker-compose logs wordpress`: View logs for the WordPress container.
+- `docker-compose ps`: List the running containers for the WordPress environment.
+
+**Best Practices:**
+
+- Use specific versions for images rather than `latest` to ensure stability.
+- Set up a restart policy for services (e.g., `restart: always`) to handle automatic container restarts.
+- Use environment variables or `.env` files for sensitive information instead of hardcoding them in the `docker-compose.yml`.
+- Back up your `wordpress` and `db_data` volumes regularly.
+- Use Docker Compose for local development and testing. For production, consider using a more robust container orchestration system if needed.
+
+Remember to customize your `docker-compose.yml` file based on the needs of your WordPress site, such as configuring email settings, adding SSL, or integrating with other services.
