@@ -282,20 +282,20 @@ networks:            # Define networks (optional if the default network is used)
 - `volumes`: Mount the directory for WordPress files to persist data.
 - `environment`: Set up WordPress-specific environment variables for database connections.
 
-**MySQL Database Service Options:**
+MySQL Database Service Options:
 
 - `image`: Use a specific MySQL image that is compatible with WordPress.
 - `volumes`: Create a volume for MySQL to persist the database.
 - `environment`: Set up MySQL-specific environment variables for the root password, database name, and user credentials.
 
-**Commands for WordPress:**
+Commands for WordPress:
 
 - `docker-compose up -d`: Start your WordPress and database containers in detached mode.
 - `docker-compose down`: Stop and remove the WordPress and database containers.
 - `docker-compose logs wordpress`: View logs for the WordPress container.
 - `docker-compose ps`: List the running containers for the WordPress environment.
 
-**Best Practices:**
+Best Practices:
 
 - Use specific versions for images rather than `latest` to ensure stability.
 - Set up a restart policy for services (e.g., `restart: always`) to handle automatic container restarts.
