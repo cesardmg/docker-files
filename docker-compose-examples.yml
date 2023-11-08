@@ -1,14 +1,35 @@
+#---------------------------------- WORDPRESS DOCKER OFFICIAL IMAGE
+version: '3.1'
+
 services:
-  service:
-    image: nginx
-    deploy:
-        resources:
-            limits:
-              cpus: 0.50
-              memory: 512M
-            reservations:
-              cpus: 0.25
-              memory: 128M
+
+  wordpress:
+    image: wordpress
+    restart: always
+    ports:
+      - 8080:80
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: exampleuser
+      WORDPRESS_DB_PASSWORD: examplepass
+      WORDPRESS_DB_NAME: exampledb
+    volumes:
+      - wordpress:/var/www/html
+
+  db:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_DATABASE: exampledb
+      MYSQL_USER: exampleuser
+      MYSQL_PASSWORD: examplepass
+      MYSQL_RANDOM_ROOT_PASSWORD: '1'
+    volumes:
+      - db:/var/lib/mysql
+
+volumes:
+  wordpress:
+  db:
 #---------------------------------- CHATGPT
 version: '3.7'
 
