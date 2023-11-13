@@ -1,0 +1,30 @@
+version: '3.8'
+# change latest for stable version
+services:
+  wordpress:
+    image: wordpress:latest
+    restart: always
+    ports:
+      - 8001:80
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress_user
+      WORDPRESS_DB_PASSWORD: wordpress_pass
+      WORDPRESS_DB_NAME: wordpress_db
+    volumes:
+      - ./wp-content:/var/www/html/wp-content
+  
+  db:
+    image: mariadb:10.6.4-focal
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: wordpress_db
+      MYSQL_USER: wordpress_user
+      MYSQL_PASSWORD: wordpress_pass
+    volumes:
+      - db_data:/var/lib/mysql
+  
+volumes:
+  db_data:  
+
