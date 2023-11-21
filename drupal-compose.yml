@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  drupal:
+    image: drupal:latest 
+    restart: always
+    ports:
+      - "8003:80" 
+    environment:
+      DRUPAL_DB_HOST: db
+      DRUPAL_DB_USER: drupal_user
+      DRUPAL_DB_PASSWORD: drupal_pass
+      DRUPAL_DB_NAME: drupal_db
+    volumes:
+      - ./drupal-modules:/var/www/html/modules # Drupal modules directory
+      - ./drupal-profiles:/var/www/html/profiles # Drupal profiles directory
+      - ./drupal-themes:/var/www/html/themes # Drupal themes directory
+      - ./drupal-sites:/var/www/html/sites # Drupal sites directory
+
+  db:
+    image: mariadb:10.6.4-focal
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: drupal_db
+      MYSQL_USER: drupal_user
+      MYSQL_PASSWORD: drupal_pass
+    volumes:
+      - db_data:/var/lib/mysql
+
+volumes:
+  db_data:
