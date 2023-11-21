@@ -30,3 +30,8 @@ services:
 
 volumes:
   db_data:
+  drupal-modules:
+  drupal-profiles:
+  drupal-themes:
+  drupal-sites:
+  
