@@ -1,0 +1,28 @@
+# syntax = docker/dockerfile:1
+
+# Base image with Ruby installed
+ARG RUBY_VERSION=3.2.2
+FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim AS base
+
+# Set the working directory inside the container
+WORKDIR /rails
+
+# Install necessary packages
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y build-essential git libvips pkg-config libsqlite3-dev nodejs yarn
+
+# Install the gems
+COPY Gemfile Gemfile.lock ./
+RUN bundle install
+
+# Copy the rest of the application code
+COPY . .
+
+# Set development environment
+ENV RAILS_ENV="development"
+
+# Expose the port for Rails server
+EXPOSE 3000
+
+# Start the Rails server
+CMD ["rails", "server", "-b", "0.0.0.0"]
